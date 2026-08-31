@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ragam Agility Games</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Martel:wght@400;600;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root{
+  --bg-deep:#1c0808;
+  --bg-panel:#2b0f0f;
+  --bg-panel-raised:#3a1414;
+  --gold:#d4a843;
+  --gold-bright:#f0c869;
+  --cream:#f2e8d5;
+  --cream-dim:#cbb59a;
+  --maroon:#8b1e2b;
+  --maroon-bright:#b6293a;
+  --line:#4a2320;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(ellipse 900px 500px at 50% -10%, #431414 0%, var(--bg-deep) 60%);
+  color:var(--cream);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:32px 16px 60px;
+}
+
+.site{
+  width:100%;
+  max-width:520px;
+}
+
+/* ---------- Site header ---------- */
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin:0 0 6px;
+  text-align:center;
+}
+
+.site-title{
+  font-family:'Martel',serif;
+  font-weight:800;
+  font-size:36px;
+  margin:0 0 6px;
+  text-align:center;
+  color:var(--cream);
+  letter-spacing:0.01em;
+}
+
+.site-sub{
+  text-align:center;
+  color:var(--cream-dim);
+  font-size:14px;
+  margin:0 0 26px;
+  line-height:1.5;
+}
+
+/* ---------- Tabs ---------- */
+.tabs{
+  display:flex;
+  gap:10px;
+  margin-bottom:28px;
+}
+.tab{
+  flex:1;
+  padding:13px 10px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:var(--bg-panel);
+  color:var(--cream-dim);
+  font-family:'Martel',serif;
+  font-weight:700;
+  font-size:15px;
+  cursor:pointer;
+  transition:border-color .15s, color .15s, background .15s;
+}
+.tab:hover{ border-color:var(--cream-dim); }
+.tab.active{
+  border-color:var(--gold);
+  color:var(--gold-bright);
+  background:linear-gradient(180deg, rgba(212,168,67,0.14), rgba(212,168,67,0.03));
+}
+.tab:focus-visible{ outline:2px solid var(--gold-bright); outline-offset:2px; }
+
+/* ---------- Game sections ---------- */
+.game{ display:none; }
+.game.active{ display:block; }
+
+.game-title{
+  font-family:'Martel',serif;
+  font-weight:800;
+  font-size:26px;
+  margin:0 0 6px;
+  text-align:center;
+  color:var(--cream);
+}
+
+.game-sub{
+  text-align:center;
+  color:var(--cream-dim);
+  font-size:14px;
+  margin:0 0 26px;
+  line-height:1.5;
+}
+
+.panel{
+  background:var(--bg-panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:24px;
+  margin-bottom:20px;
+}
+
+label.field-label{
+  display:block;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:10px;
+}
+
+.ragam-input-row{
+  display:flex;
+  gap:8px;
+  margin-bottom:14px;
+}
+.ragam-input-row:last-child{ margin-bottom:0; }
+
+input[type="text"]{
+  flex:1;
+  background:var(--bg-deep);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:11px 13px;
+  color:var(--cream);
+  font-size:15px;
+  font-family:'Inter',sans-serif;
+  outline:none;
+  transition:border-color .15s;
+  width:100%;
+}
+input[type="text"]:focus{ border-color:var(--gold); }
+input[type="text"]::placeholder{ color:#8a7a80; }
+
+button{
+  font-family:'Inter',sans-serif;
+  cursor:pointer;
+  border:none;
+  outline-offset:2px;
+}
+button:focus-visible{ outline:2px solid var(--gold-bright); }
+
+.add-btn{
+  background:var(--maroon);
+  color:var(--cream);
+  font-weight:600;
+  font-size:14px;
+  border-radius:8px;
+  padding:0 20px;
+  transition:background .15s;
+}
+.add-btn:hover{ background:var(--maroon-bright); }
+
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  min-height:36px;
+}
+
+.chip{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:var(--bg-panel-raised);
+  border:1px solid var(--line);
+  color:var(--cream);
+  padding:7px 8px 7px 14px;
+  border-radius:999px;
+  font-size:14px;
+  font-family:'Martel',serif;
+  font-weight:600;
+}
+.chip button{
+  background:none;
+  color:var(--cream-dim);
+  font-size:16px;
+  line-height:1;
+  padding:2px 6px;
+  border-radius:999px;
+}
+.chip button:hover{ color:var(--maroon-bright); background:rgba(139,38,53,0.2); }
+
+.empty-hint{
+  color:#8a7a80;
+  font-size:13px;
+  font-style:italic;
+  padding:6px 2px;
+}
+
+.hint-note{
+  font-size:12px;
+  color:var(--gold);
+  opacity:0.85;
+  font-style:italic;
+  margin:12px 0 0;
+}
+
+.error{
+  font-size:13px;
+  color:#ff9d8f;
+  margin:12px 0 0;
+  display:none;
+}
+
+.tempo-row{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
+.tempo-value{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:22px;
+  font-weight:600;
+  color:var(--gold-bright);
+}
+.tempo-value span{
+  font-size:12px;
+  color:var(--cream-dim);
+  font-weight:500;
+  margin-left:4px;
+}
+
+input[type="range"]{
+  -webkit-appearance:none;
+  width:100%;
+  height:4px;
+  border-radius:2px;
+  background:var(--line);
+  outline:none;
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:20px;height:20px;border-radius:50%;
+  background:var(--gold);
+  border:3px solid var(--bg-deep);
+  box-shadow:0 0 0 1px var(--gold);
+  cursor:pointer;
+  margin-top:-8px;
+}
+input[type="range"]::-webkit-slider-runnable-track{
+  height:4px;border-radius:2px;
+  background:linear-gradient(to right, var(--gold) 0%, var(--gold) var(--fill,50%), var(--line) var(--fill,50%));
+}
+input[type="range"]::-moz-range-thumb{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--gold);border:3px solid var(--bg-deep);
+  box-shadow:0 0 0 1px var(--gold);cursor:pointer;
+}
+input[type="range"]::-moz-range-progress{
+  background:var(--gold);height:4px;border-radius:2px;
+}
+
+/* Level selector (Koraippu: full cards) */
+.level-select{ display:flex; gap:10px; }
+.level-option{
+  flex:1;
+  background:var(--bg-panel-raised);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:14px;
+  cursor:pointer;
+  transition:border-color .15s, background .15s;
+}
+.level-option:hover{ border-color:var(--cream-dim); }
+.level-option.active{
+  border-color:var(--gold);
+  background:linear-gradient(180deg, rgba(212,168,67,0.12), rgba(212,168,67,0.03));
+}
+.level-title{
+  font-family:'Martel',serif;
+  font-weight:700;
+  font-size:15px;
+  color:var(--cream);
+  margin-bottom:4px;
+}
+.level-option.active .level-title{ color:var(--gold-bright); }
+.level-desc{
+  font-size:12px;
+  line-height:1.45;
+  color:var(--cream-dim);
+}
+
+/* Level selector (Alapanai: compact pills + shared caption) */
+.level-pill-row{ display:flex; gap:8px; margin-bottom:12px; }
+.level-pill{
+  flex:1;
+  height:42px;
+  border-radius:8px;
+  border:1px solid var(--line);
+  background:var(--bg-panel-raised);
+  color:var(--cream);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:0.03em;
+  transition:border-color .15s, background .15s, color .15s;
+}
+.level-pill:hover{ border-color:var(--cream-dim); }
+.level-pill.active{
+  background:var(--gold);
+  color:var(--bg-deep);
+  border-color:var(--gold);
+}
+.level-caption{
+  font-size:13px;
+  color:var(--cream-dim);
+  line-height:1.5;
+  margin:0;
+  min-height:38px;
+}
+
+.start-btn{
+  width:100%;
+  background:var(--gold);
+  color:#241322;
+  font-weight:700;
+  font-size:16px;
+  font-family:'Martel',serif;
+  padding:15px;
+  border-radius:10px;
+  transition:background .15s, transform .1s;
+}
+.start-btn:hover:not(:disabled){ background:var(--gold-bright); }
+.start-btn:active:not(:disabled){ transform:scale(0.99); }
+.start-btn:disabled{
+  background:#3a2c38;
+  color:#8a7a80;
+  cursor:not-allowed;
+}
+
+/* ---- Challenge / run views ---- */
+.challenge{ display:none; text-align:center; }
+.challenge.active{ display:block; }
+.setup.hidden{ display:none; }
+
+.timer{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:15px;
+  color:var(--cream-dim);
+  letter-spacing:0.05em;
+  margin-bottom:18px;
+}
+.timer b{ color:var(--gold-bright); font-size:17px; }
+
+.wheel-wrap{
+  position:relative;
+  width:260px;
+  height:260px;
+  margin:0 auto 26px;
+}
+
+.ragam-display{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:170px;
+  text-align:center;
+}
+
+.ragam-display-standalone{
+  text-align:center;
+  margin:8px 0 26px;
+}
+
+.ragam-eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:6px;
+}
+
+.ragam-name{
+  font-family:'Martel',serif;
+  font-weight:800;
+  font-size:26px;
+  line-height:1.15;
+  color:var(--cream);
+  word-break:break-word;
+}
+
+.sa-tag{
+  display:none;
+  margin-top:10px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--bg-deep);
+  background:var(--gold);
+  padding:4px 12px;
+  border-radius:999px;
+}
+
+.status-line{
+  color:var(--cream-dim);
+  font-size:14px;
+  margin-bottom:22px;
+  min-height:20px;
+}
+.status-line.flash{ color:var(--gold-bright); font-weight:600; }
+
+.clock-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  margin:0 0 6px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  color:var(--cream-dim);
+  text-align:left;
+}
+
+.bar-track{
+  height:8px;
+  border-radius:4px;
+  background:rgba(242,232,213,0.1);
+  overflow:hidden;
+  margin-bottom:18px;
+}
+.bar-fill{
+  height:100%;
+  width:100%;
+  background:var(--gold);
+  transition:width 1s linear;
+}
+
+.controls-row{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+}
+
+.ghost-btn{
+  background:transparent;
+  border:1px solid var(--line);
+  color:var(--cream-dim);
+  font-size:13px;
+  font-weight:500;
+  padding:10px 18px;
+  border-radius:8px;
+  transition:border-color .15s,color .15s;
+}
+.ghost-btn:hover{ border-color:var(--gold); color:var(--gold-bright); }
+
+/* ---- Results / done views ---- */
+.results{ display:none; }
+.results.active{ display:block; text-align:center; }
+.results h2{
+  font-family:'Martel',serif;
+  font-size:24px;
+  color:var(--gold-bright);
+  margin:0 0 4px;
+}
+.results .sub{ text-align:center; color:var(--cream-dim); font-size:14px; margin:0 0 22px; line-height:1.5; }
+.results .sub.italic{ font-style:italic; margin-bottom:24px; }
+
+.history{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom:24px;
+  text-align:left;
+}
+.history-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:var(--bg-panel-raised);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:10px 14px;
+}
+.history-num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  color:var(--gold);
+  width:22px;
+  flex-shrink:0;
+}
+.history-name{
+  font-family:'Martel',serif;
+  font-weight:600;
+  font-size:15px;
+}
+.history-sa{
+  margin-left:auto;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:var(--gold);
+  flex-shrink:0;
+}
+
+@media (prefers-reduced-motion: reduce){
+  * { transition:none !important; animation:none !important; }
+}
+
+@media (max-width:400px){
+  .wheel-wrap{ width:220px; height:220px; }
+  .site-title{ font-size:29px; }
+  .game-title{ font-size:22px; }
+  .level-select{ flex-direction:column; }
+}
+</style>
+</head>
+<body>
+
+<div class="site">
+  <p class="eyebrow">Built by Geeta Shankar</p>
+  <h1 class="site-title">Ragam Agility Games</h1>
+  <p class="site-sub">Two ways to train fast, unscheduled ragam switching.</p>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" type="button" data-target="koraippuGame">Koraippu Game</button>
+    <button class="tab" type="button" data-target="alapanaiGame">Alapanai Game</button>
+  </div>
+
+  <!-- ======================= KORAIPPU GAME ======================= -->
+  <section class="game active" id="koraippuGame">
+    <h2 class="game-title">Koraippu Game</h2>
+    <p class="game-sub">Sing on the beat. Every 8 counts, the ragam changes without warning — hold the line as it shifts under you.</p>
+
+    <div class="setup" id="setupView">
+      <div class="panel">
+        <label class="field-label" for="ragamInput">Your ragams</label>
+        <div class="ragam-input-row">
+          <input type="text" id="ragamInput" placeholder="e.g. Kalyani" autocomplete="off">
+          <button class="add-btn" id="addBtn">Add</button>
+        </div>
+        <div class="chips" id="chipList">
+          <span class="empty-hint">Add at least 2 ragams to begin</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <label class="field-label">Level</label>
+        <div class="level-select" id="levelSelect">
+          <div class="level-option active" data-level="1">
+            <div class="level-title">Level 1</div>
+            <div class="level-desc">Ragam shuffles every 8 beats.</div>
+          </div>
+          <div class="level-option" data-level="2">
+            <div class="level-title">Level 2</div>
+            <div class="level-desc">Ragam shuffles, plus a random koraippu on upper or lower Sa each cycle.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="tempo-row">
+          <label class="field-label" for="tempoSlider" style="margin-bottom:0;">Tempo</label>
+          <div class="tempo-value"><span id="bpmValue">80</span><span>BPM</span></div>
+        </div>
+        <input type="range" id="tempoSlider" min="40" max="160" value="80" step="1">
+      </div>
+
+      <button class="start-btn" id="startBtn" disabled>Add at least 2 ragams to start</button>
+    </div>
+
+    <div class="challenge" id="challengeView">
+      <div class="timer"><b id="timeLeft">60</b>s remaining &nbsp;·&nbsp; beat <span id="beatCount">1</span> of 8</div>
+
+      <div class="wheel-wrap">
+        <svg viewBox="0 0 260 260" width="260" height="260" id="wheelSvg"></svg>
+        <div class="ragam-display">
+          <div class="ragam-eyebrow" id="cycleLabel">Cycle 1</div>
+          <div class="ragam-name" id="currentRagam">—</div>
+          <div class="sa-tag" id="saTag"></div>
+        </div>
+      </div>
+
+      <div class="status-line" id="statusLine">Get ready…</div>
+
+      <div class="controls-row">
+        <button class="ghost-btn" id="stopBtn">End early</button>
+      </div>
+    </div>
+
+    <div class="results" id="resultsView">
+      <h2>Session complete</h2>
+      <p class="sub">Here's the order the ragams came at you.</p>
+      <div class="history" id="historyList"></div>
+      <button class="start-btn" id="restartBtn">Practice again</button>
+    </div>
+  </section>
+
+  <!-- ======================= ALAPANAI GAME ======================= -->
+  <section class="game" id="alapanaiGame">
+    <h2 class="game-title">Alapanai Game</h2>
+    <p class="game-sub">No tāla, no lead-in. The ragam — and at higher levels, the range and pace — shifts under you at random intervals across 60 seconds.</p>
+
+    <div class="setup" id="alSetup">
+      <div class="panel">
+        <label class="field-label" for="alR1">Ragam 1</label>
+        <div class="ragam-input-row">
+          <input type="text" id="alR1" placeholder="e.g. Hamsadhwani">
+        </div>
+        <label class="field-label" for="alR2">Ragam 2</label>
+        <div class="ragam-input-row">
+          <input type="text" id="alR2" placeholder="e.g. Varali">
+        </div>
+        <label class="field-label" for="alR3">Ragam 3 (optional)</label>
+        <div class="ragam-input-row">
+          <input type="text" id="alR3" placeholder="e.g. Suruti">
+        </div>
+      </div>
+
+      <div class="panel">
+        <label class="field-label">Level</label>
+        <div class="level-pill-row" id="alLevelSelect">
+          <button type="button" class="level-pill active" data-level="1">Level 1</button>
+          <button type="button" class="level-pill" data-level="2">Level 2</button>
+          <button type="button" class="level-pill" data-level="3">Level 3</button>
+        </div>
+        <p class="level-caption" id="alLvlDesc">Ragam only. Segment lengths are randomized (10s and up) across 60 seconds.</p>
+        <p class="hint-note">No repeats back-to-back — each switch is a genuinely new ragam to reorient to.</p>
+      </div>
+
+      <div class="error" id="alErr"></div>
+
+      <button class="start-btn" id="alStartBtn">Start 60s practice</button>
+    </div>
+
+    <div class="challenge" id="alRun">
+      <div class="ragam-display-standalone">
+        <div class="ragam-eyebrow" id="alSegLabel">Segment 1</div>
+        <div class="ragam-name" id="alBigRagam">—</div>
+        <div class="sa-tag" id="alExtras"></div>
+      </div>
+
+      <div class="status-line" id="alTransitionCaption">New segment: identify and settle into the ragam without a lead-in.</div>
+
+      <div class="clock-row">
+        <span>this segment</span>
+        <span id="alSegClockLabel">10s</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" id="alSegBar"></div></div>
+
+      <div class="clock-row">
+        <span>total time left</span>
+        <span id="alTotalClockLabel">60s</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" id="alTotalBar"></div></div>
+
+      <div class="controls-row">
+        <button class="ghost-btn" id="alStopBtn">Stop</button>
+      </div>
+    </div>
+
+    <div class="results" id="alDone">
+      <h2>Session complete</h2>
+      <p class="sub">60 seconds complete.</p>
+      <p class="sub italic">Consistent switching under time pressure builds faster raga recognition than isolated practice.</p>
+      <button class="start-btn" id="alAgainBtn">Practice again</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// ======================= TAB SWITCHING =======================
+(function(){
+  const tabs = document.querySelectorAll('.tab');
+  const games = document.querySelectorAll('.game');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      games.forEach(g => g.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.getAttribute('data-target')).classList.add('active');
+    });
+  });
+})();
+</script>
+
+<script>
+// ======================= KORAIPPU GAME =======================
+(function(){
+  // ---------- State ----------
+  let ragams = [];
+  let bpm = 80;
+  let audioCtx = null;
+  let running = false;
+  let schedulerTimer = null;
+  let nextNoteTime = 0;
+  let beatInCycle = 0; // 0-7
+  let cycleCount = 0;
+  let currentRagamIdx = -1;
+  let lastRagamIdx = -1;
+  let level = 1;
+  let currentSa = '';
+  let sessionHistory = [];
+  let countdownInterval = null;
+  let secondsLeft = 60;
+  const SESSION_SECONDS = 60;
+  const LOOKAHEAD = 25.0; // ms
+  const SCHEDULE_AHEAD = 0.12; // seconds
+
+  // ---------- Elements ----------
+  const ragamInput = document.getElementById('ragamInput');
+  const addBtn = document.getElementById('addBtn');
+  const chipList = document.getElementById('chipList');
+  const tempoSlider = document.getElementById('tempoSlider');
+  const bpmValue = document.getElementById('bpmValue');
+  const startBtn = document.getElementById('startBtn');
+
+  const setupView = document.getElementById('setupView');
+  const challengeView = document.getElementById('challengeView');
+  const resultsView = document.getElementById('resultsView');
+
+  const timeLeftEl = document.getElementById('timeLeft');
+  const beatCountEl = document.getElementById('beatCount');
+  const cycleLabelEl = document.getElementById('cycleLabel');
+  const currentRagamEl = document.getElementById('currentRagam');
+  const saTagEl = document.getElementById('saTag');
+  const levelOptions = document.querySelectorAll('#levelSelect .level-option');
+  const statusLineEl = document.getElementById('statusLine');
+  const stopBtn = document.getElementById('stopBtn');
+  const wheelSvg = document.getElementById('wheelSvg');
+
+  const historyList = document.getElementById('historyList');
+  const restartBtn = document.getElementById('restartBtn');
+
+  // ---------- Slider fill ----------
+  function updateSliderFill(){
+    const min = +tempoSlider.min, max = +tempoSlider.max, val = +tempoSlider.value;
+    const pct = ((val - min) / (max - min)) * 100;
+    tempoSlider.style.setProperty('--fill', pct + '%');
+  }
+  tempoSlider.addEventListener('input', () => {
+    bpm = +tempoSlider.value;
+    bpmValue.textContent = bpm;
+    updateSliderFill();
+  });
+  updateSliderFill();
+
+  // ---------- Ragam chips ----------
+  function renderChips(){
+    chipList.innerHTML = '';
+    if(ragams.length === 0){
+      chipList.innerHTML = '<span class="empty-hint">Add at least 2 ragams to begin</span>';
+    } else {
+      ragams.forEach((r, i) => {
+        const chip = document.createElement('span');
+        chip.className = 'chip';
+        chip.innerHTML = `<span>${escapeHtml(r)}</span>`;
+        const rm = document.createElement('button');
+        rm.setAttribute('aria-label', 'Remove ' + r);
+        rm.textContent = '×';
+        rm.addEventListener('click', () => {
+          ragams.splice(i, 1);
+          renderChips();
+        });
+        chip.appendChild(rm);
+        chipList.appendChild(chip);
+      });
+    }
+    const enough = ragams.length >= 2;
+    startBtn.disabled = !enough;
+    startBtn.textContent = enough ? 'Start 60s challenge' : 'Add at least 2 ragams to start';
+  }
+
+  function escapeHtml(str){
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  function addRagam(){
+    const val = ragamInput.value.trim();
+    if(!val) return;
+    ragams.push(val);
+    ragamInput.value = '';
+    renderChips();
+    ragamInput.focus();
+  }
+  addBtn.addEventListener('click', addRagam);
+  ragamInput.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter'){ e.preventDefault(); addRagam(); }
+  });
+
+  renderChips();
+
+  // ---------- Level selector ----------
+  levelOptions.forEach(opt => {
+    opt.addEventListener('click', () => {
+      levelOptions.forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+      level = +opt.getAttribute('data-level');
+    });
+  });
+
+  // ---------- Wheel (SVG tala beat markers) ----------
+  function buildWheel(){
+    const cx = 130, cy = 130, r = 108;
+    let svg = '';
+    for(let i = 0; i < 8; i++){
+      const angle = (Math.PI * 2 * i / 8) - Math.PI/2;
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      const isSam = i === 0;
+      const size = isSam ? 9 : 6;
+      svg += `<circle class="beat-node" data-beat="${i}" cx="${x}" cy="${y}" r="${size}" fill="${isSam ? 'var(--maroon)' : 'var(--line)'}" stroke="${isSam ? 'var(--gold)' : 'none'}" stroke-width="${isSam ? 2 : 0}"/>`;
+    }
+    svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--line)" stroke-width="1"/>`;
+    wheelSvg.innerHTML = svg;
+  }
+  buildWheel();
+
+  function highlightBeat(beatIdx){
+    const nodes = wheelSvg.querySelectorAll('.beat-node');
+    nodes.forEach(node => {
+      const b = +node.getAttribute('data-beat');
+      const isSam = b === 0;
+      if(b === beatIdx){
+        node.setAttribute('fill', 'var(--gold-bright)');
+        node.setAttribute('r', isSam ? 12 : 9);
+      } else {
+        node.setAttribute('fill', isSam ? 'var(--maroon)' : 'var(--line)');
+        node.setAttribute('r', isSam ? 9 : 6);
+      }
+    });
+  }
+
+  // ---------- Audio ----------
+  function ensureAudio(){
+    if(!audioCtx){
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if(audioCtx.state === 'suspended'){
+      audioCtx.resume();
+    }
+  }
+
+  function playClick(time, accent){
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.frequency.value = accent ? 1400 : 900;
+    osc.type = 'sine';
+    gain.gain.setValueAtTime(0.0001, time);
+    gain.gain.exponentialRampToValueAtTime(accent ? 0.5 : 0.28, time + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.08);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(time);
+    osc.stop(time + 0.09);
+  }
+
+  // ---------- Ragam shuffle ----------
+  function pickNextRagam(){
+    if(ragams.length === 1){
+      currentRagamIdx = 0;
+      return;
+    }
+    let idx;
+    do {
+      idx = Math.floor(Math.random() * ragams.length);
+    } while(idx === lastRagamIdx);
+    lastRagamIdx = idx;
+    currentRagamIdx = idx;
+  }
+
+  function pickNextSa(){
+    const options = ['Upper Sa', 'Lower Sa'];
+    const idx = Math.floor(Math.random() * options.length);
+    currentSa = options[idx];
+  }
+
+  function advanceRagamUI(){
+    pickNextRagam();
+    cycleCount++;
+
+    let saLabel = null;
+    if(level === 2){
+      pickNextSa();
+      saLabel = currentSa;
+    }
+
+    sessionHistory.push({ ragam: ragams[currentRagamIdx], sa: saLabel });
+    currentRagamEl.textContent = ragams[currentRagamIdx];
+    cycleLabelEl.textContent = 'Cycle ' + cycleCount;
+
+    if(saLabel){
+      saTagEl.textContent = 'Koraippu · ' + saLabel;
+      saTagEl.style.display = 'inline-block';
+    } else {
+      saTagEl.style.display = 'none';
+    }
+
+    statusLineEl.textContent = 'New ragam — go!';
+    statusLineEl.classList.add('flash');
+    setTimeout(() => statusLineEl.classList.remove('flash'), 500);
+  }
+
+  // ---------- Scheduler ----------
+  function scheduler(){
+    while(nextNoteTime < audioCtx.currentTime + SCHEDULE_AHEAD){
+      const isDownbeat = beatInCycle === 0;
+      playClick(nextNoteTime, isDownbeat);
+      scheduleUIUpdate(nextNoteTime, beatInCycle);
+      nextNoteTime += 60.0 / bpm;
+      beatInCycle = (beatInCycle + 1) % 8;
+    }
+    schedulerTimer = setTimeout(scheduler, LOOKAHEAD);
+  }
+
+  function scheduleUIUpdate(time, beatIdx){
+    const delay = Math.max(0, (time - audioCtx.currentTime) * 1000);
+    setTimeout(() => {
+      if(!running) return;
+      highlightBeat(beatIdx);
+      beatCountEl.textContent = beatIdx + 1;
+      if(beatIdx === 0){
+        advanceRagamUI();
+      }
+    }, delay);
+  }
+
+  // ---------- Session control ----------
+  function startChallenge(){
+    ensureAudio();
+    ragams = ragams.slice();
+    running = true;
+    beatInCycle = 0;
+    cycleCount = 0;
+    lastRagamIdx = -1;
+    sessionHistory = [];
+    secondsLeft = SESSION_SECONDS;
+
+    setupView.classList.add('hidden');
+    challengeView.classList.add('active');
+    resultsView.classList.remove('active');
+
+    statusLineEl.textContent = 'Get ready…';
+    currentRagamEl.textContent = '—';
+    saTagEl.style.display = 'none';
+    cycleLabelEl.textContent = 'Cycle 1';
+    timeLeftEl.textContent = secondsLeft;
+    beatCountEl.textContent = '1';
+
+    nextNoteTime = audioCtx.currentTime + 0.15;
+    scheduler();
+
+    countdownInterval = setInterval(() => {
+      secondsLeft--;
+      timeLeftEl.textContent = Math.max(0, secondsLeft);
+      if(secondsLeft <= 0){
+        endChallenge();
+      }
+    }, 1000);
+  }
+
+  function endChallenge(){
+    running = false;
+    clearTimeout(schedulerTimer);
+    clearInterval(countdownInterval);
+
+    challengeView.classList.remove('active');
+    resultsView.classList.add('active');
+
+    historyList.innerHTML = '';
+    if(sessionHistory.length === 0){
+      historyList.innerHTML = '<div class="history-item"><span class="history-name">Session ended before the first cycle completed.</span></div>';
+    } else {
+      sessionHistory.forEach((entry, i) => {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        const saHtml = entry.sa ? `<span class="history-sa">${escapeHtml(entry.sa)}</span>` : '';
+        item.innerHTML = `<span class="history-num">${String(i+1).padStart(2,'0')}</span><span class="history-name">${escapeHtml(entry.ragam)}</span>${saHtml}`;
+        historyList.appendChild(item);
+      });
+    }
+  }
+
+  startBtn.addEventListener('click', startChallenge);
+  stopBtn.addEventListener('click', endChallenge);
+  restartBtn.addEventListener('click', () => {
+    resultsView.classList.remove('active');
+    setupView.classList.remove('hidden');
+    renderChips();
+  });
+})();
+</script>
+
+<script>
+// ======================= ALAPANAI GAME =======================
+(function(){
+  let level = 1;
+  let schedule = [];
+  let segIdx = 0;
+  let segRemaining = 0;
+  let totalRemaining = 60;
+  let timerHandle = null;
+  let transitionCaptionTimeout = null;
+
+  const LEVEL2_SLOTS = [
+    { range: 'low range' },
+    { range: 'mid range' },
+    { range: 'upper range' }
+  ];
+
+  const LEVEL3_SLOTS = [
+    { range: 'mid range', speed: 'slow sancharis' },
+    { range: 'upper range', speed: 'medium sancharis' },
+    { range: 'low range', speed: 'fast sancharis' }
+  ];
+
+  const r1 = document.getElementById('alR1');
+  const r2 = document.getElementById('alR2');
+  const r3 = document.getElementById('alR3');
+  const errEl = document.getElementById('alErr');
+  const lvlDescEl = document.getElementById('alLvlDesc');
+  const levelPills = document.querySelectorAll('#alLevelSelect .level-pill');
+  const startBtn = document.getElementById('alStartBtn');
+  const stopBtn = document.getElementById('alStopBtn');
+  const againBtn = document.getElementById('alAgainBtn');
+
+  const setupView = document.getElementById('alSetup');
+  const runView = document.getElementById('alRun');
+  const doneView = document.getElementById('alDone');
+
+  const segLabelEl = document.getElementById('alSegLabel');
+  const bigRagamEl = document.getElementById('alBigRagam');
+  const extrasEl = document.getElementById('alExtras');
+  const transitionCaptionEl = document.getElementById('alTransitionCaption');
+  const segClockLabelEl = document.getElementById('alSegClockLabel');
+  const segBarEl = document.getElementById('alSegBar');
+  const totalClockLabelEl = document.getElementById('alTotalClockLabel');
+  const totalBarEl = document.getElementById('alTotalBar');
+
+  function setLevel(n){
+    level = n;
+    levelPills.forEach(pill => {
+      pill.classList.toggle('active', +pill.getAttribute('data-level') === n);
+    });
+    if(n === 1){
+      lvlDescEl.textContent = 'Ragam only. Segment lengths are randomized (10s and up) across 60 seconds.';
+    } else if(n === 2){
+      lvlDescEl.textContent = 'Three fixed 20s segments — low, mid, and upper range — each randomly assigned a ragam.';
+    } else {
+      lvlDescEl.textContent = 'Three fixed 20s segments, each pairing a range with a sanchari speed, randomly assigned a ragam.';
+    }
+  }
+  levelPills.forEach(pill => {
+    pill.addEventListener('click', () => setLevel(+pill.getAttribute('data-level')));
+  });
+
+  function assignRagams(slots, ragams){
+    const segs = [];
+    let lastRagam = null;
+    slots.forEach(slot => {
+      let pool = ragams;
+      if(ragams.length > 1) pool = ragams.filter(r => r !== lastRagam);
+      const ragam = pool[Math.floor(Math.random() * pool.length)];
+      segs.push({ ragam, duration: 20, range: slot.range, speed: slot.speed });
+      lastRagam = ragam;
+    });
+    return segs;
+  }
+
+  function buildSchedule(ragams){
+    if(level === 1){
+      const segs = [];
+      let remaining = 60;
+      let lastRagam = null;
+      while(remaining > 0){
+        const options = [];
+        for(let c = 10; c <= remaining; c += 10){
+          if(remaining - c === 0 || remaining - c >= 10) options.push(c);
+        }
+        const chunk = options[Math.floor(Math.random() * options.length)];
+        let pool = ragams;
+        if(ragams.length > 1) pool = ragams.filter(r => r !== lastRagam);
+        const ragam = pool[Math.floor(Math.random() * pool.length)];
+        segs.push({ ragam, duration: chunk });
+        lastRagam = ragam;
+        remaining -= chunk;
+      }
+      return segs;
+    }
+    if(level === 2) return assignRagams(LEVEL2_SLOTS, ragams);
+    return assignRagams(LEVEL3_SLOTS, ragams);
+  }
+
+  function showError(msg){
+    errEl.textContent = msg;
+    errEl.style.display = msg ? 'block' : 'none';
+  }
+
+  function flashTransitionCaption(){
+    clearTimeout(transitionCaptionTimeout);
+    transitionCaptionEl.classList.add('flash');
+    transitionCaptionTimeout = setTimeout(() => {
+      transitionCaptionEl.classList.remove('flash');
+    }, 2200);
+  }
+
+  function renderSegment(){
+    const seg = schedule[segIdx];
+    segLabelEl.textContent = 'Segment ' + (segIdx + 1);
+    bigRagamEl.textContent = seg.ragam;
+
+    const parts = [];
+    if(seg.range) parts.push(seg.range);
+    if(seg.speed) parts.push(seg.speed);
+    if(parts.length){
+      extrasEl.textContent = parts.join(' · ');
+      extrasEl.style.display = 'inline-block';
+    } else {
+      extrasEl.style.display = 'none';
+    }
+
+    segRemaining = seg.duration;
+    segClockLabelEl.textContent = segRemaining + 's';
+    segBarEl.style.transition = 'none';
+    segBarEl.style.width = '100%';
+    void segBarEl.offsetWidth;
+    segBarEl.style.transition = 'width 1s linear';
+
+    transitionCaptionEl.textContent = 'New segment: identify and settle into the ragam without a lead-in.';
+    flashTransitionCaption();
+  }
+
+  function tick(){
+    totalRemaining -= 1;
+    segRemaining -= 1;
+
+    totalClockLabelEl.textContent = totalRemaining + 's';
+    totalBarEl.style.width = ((totalRemaining / 60) * 100) + '%';
+
+    if(totalRemaining <= 0){
+      clearInterval(timerHandle);
+      runView.classList.remove('active');
+      doneView.classList.add('active');
+      return;
+    }
+
+    if(segRemaining <= 0){
+      segIdx += 1;
+      renderSegment();
+    } else {
+      segClockLabelEl.textContent = segRemaining + 's';
+      const seg = schedule[segIdx];
+      segBarEl.style.width = ((segRemaining / seg.duration) * 100) + '%';
+    }
+  }
+
+  startBtn.addEventListener('click', () => {
+    const raw = [r1.value.trim(), r2.value.trim(), r3.value.trim()].filter(Boolean);
+
+    if(raw.length < 2){
+      showError('Enter at least 2 ragams');
+      return;
+    }
+    showError('');
+
+    schedule = buildSchedule(raw);
+    segIdx = 0;
+    totalRemaining = 60;
+
+    setupView.classList.add('hidden');
+    doneView.classList.remove('active');
+    runView.classList.add('active');
+
+    totalBarEl.style.transition = 'none';
+    totalBarEl.style.width = '100%';
+    void totalBarEl.offsetWidth;
+    totalBarEl.style.transition = 'width 1s linear';
+    totalClockLabelEl.textContent = '60s';
+
+    renderSegment();
+    timerHandle = setInterval(tick, 1000);
+  });
+
+  stopBtn.addEventListener('click', () => {
+    clearInterval(timerHandle);
+    runView.classList.remove('active');
+    setupView.classList.remove('hidden');
+  });
+
+  againBtn.addEventListener('click', () => {
+    doneView.classList.remove('active');
+    setupView.classList.remove('hidden');
+  });
+
+  setLevel(1);
+})();
+</script>
+
+</body>
+</html>
